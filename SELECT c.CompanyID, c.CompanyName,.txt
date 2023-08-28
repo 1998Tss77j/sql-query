@@ -1,0 +1,11 @@
+SELECT c.CompanyID, c.CompanyName,
+       CASE
+           WHEN COUNT(e.Salary) % 2 = 1 THEN
+               MAX(e.Salary) OVER (PARTITION BY c.CompanyID)
+           ELSE
+               (MAX(e.Salary) OVER (PARTITION BY c.CompanyID ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) +
+                MIN(e.Salary) OVER (PARTITION BY c.CompanyID ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING)) / 2.0
+       END AS MedianSalary
+FROM Company c
+LEFT JOIN Employee e ON c.CompanyID = e.CompanyID
+GROUP BY c.CompanyID, c.CompanyName;
