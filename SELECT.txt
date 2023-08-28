@@ -1,0 +1,11 @@
+SELECT 
+    point1.PointName AS Point1,
+    point2.PointName AS Point2,
+    SQRT(POW(point2.X - point1.X, 2) + POW(point2.Y - point1.Y, 2)) AS ShortestDistance
+FROM 
+    Points point1
+JOIN 
+    Points point2 ON point1.PointName <> point2.PointName
+ORDER BY 
+    ShortestDistance
+LIMIT 1;
